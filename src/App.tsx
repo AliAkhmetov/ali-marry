@@ -5,6 +5,7 @@ import CeremonyIcon from "@/assets/icons/ceremony.svg?react";
 import CakeIcon from "@/assets/icons/cake.svg?react";
 import MusicIcon from "@/assets/icons/music.svg?react";
 import CameraIcon from "@/assets/icons/camera.svg?react";
+import PlayerIcon from "@/assets/icons/player.svg?react";
 import FormImage from "@/assets/images/form/ali-aru.webp";
 import Gallery1Image from "@/assets/images/gallery/1.webp";
 import Gallery2Image from "@/assets/images/gallery/2.webp";
@@ -65,6 +66,10 @@ export const App: FunctionComponent = () => {
           </ul>
         </nav>
       </header>
+
+      <button type="button" className={styles["player"]}>
+        <PlayerIcon/>
+      </button>
 
       <section className={styles["main"]}>
         <h1 className={styles["main__title"]}>
