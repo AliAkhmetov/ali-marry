@@ -272,7 +272,7 @@ export const App: FunctionComponent = () => {
       </section>
 
       <section className={styles["gallery"]}>
-        <h2 className={styles["gallery__title"]}>{t("owners.title")}</h2>
+        <h2 className={styles["gallery__title"]}>{t("gallery.title")}</h2>
 
         <div className={styles["gallery__icon"]}>
           <CameraIcon />
