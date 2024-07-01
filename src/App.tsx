@@ -6,6 +6,8 @@ import CakeIcon from "@/assets/icons/cake.svg?react";
 import MusicIcon from "@/assets/icons/music.svg?react";
 import CameraIcon from "@/assets/icons/camera.svg?react";
 import PlayerIcon from "@/assets/icons/player.svg?react";
+import CircledChevronLeftIcon from "@/assets/icons/circled-chevron-left.svg?react";
+import CircledChevronRightIcon from "@/assets/icons/circled-chevron-right.svg?react";
 import FormImage from "@/assets/images/form/ali-aru.webp";
 import Gallery1Image from "@/assets/images/gallery/1.webp";
 import Gallery2Image from "@/assets/images/gallery/2.webp";
@@ -68,7 +70,7 @@ export const App: FunctionComponent = () => {
       </header>
 
       <button type="button" className={styles["player"]}>
-        <PlayerIcon/>
+        <PlayerIcon />
       </button>
 
       <section className={styles["main"]}>
@@ -241,7 +243,7 @@ export const App: FunctionComponent = () => {
           className={styles["swiper"]}
           allowTouchMove
           modules={[Navigation]}
-          navigation
+          navigation={{ nextEl: "#swiper-next", prevEl: "#swiper-prev" }}
         >
           <SwiperSlide className={styles["swiper__item"]}>
             <img className={styles["swiper__image"]} src={Gallery1Image} alt="" />
@@ -262,12 +264,24 @@ export const App: FunctionComponent = () => {
             <img className={styles["swiper__image"]} src={Gallery6Image} alt="" />
           </SwiperSlide>
         </Swiper>
+
+        <div className={styles["swiper-actions"]}>
+          <button type="button" id="swiper-prev" className={styles["swiper-actions__button"]}>
+            <CircledChevronLeftIcon />
+          </button>
+
+          <button type="button" id="swiper-next" className={styles["swiper-actions__button"]}>
+            <CircledChevronRightIcon />
+          </button>
+        </div>
       </section>
 
       <section className={styles["owners"]}>
         <h2 className={styles["owners__title"]}>Той иелері:</h2>
         <h2 className={styles["owners__names"]}>Жандарбек - Қарлығаш</h2>
-        <h2 className={styles["owners__subtitle"]}>Келіңіздер, тойымыздың қадірлі қонағы болыңыздар!</h2>
+        <h2 className={styles["owners__subtitle"]}>
+          Келіңіздер, тойымыздың қадірлі қонағы болыңыздар!
+        </h2>
       </section>
     </>
   );
