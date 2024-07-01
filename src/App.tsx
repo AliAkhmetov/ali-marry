@@ -15,11 +15,24 @@ import Gallery3Image from "@/assets/images/gallery/3.webp";
 import Gallery4Image from "@/assets/images/gallery/4.webp";
 import Gallery5Image from "@/assets/images/gallery/5.webp";
 import Gallery6Image from "@/assets/images/gallery/6.webp";
+import Audio from "@/assets/audios/audio.mp3";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 
 export const App: FunctionComponent = () => {
+  const handleToggleAudio = () => {
+    const audio = document.querySelector("audio");
+
+    if (!audio) return;
+
+    if (audio.paused) {
+      console.log("play")
+      return audio.play();
+    }
+    console.log("pause")
+    audio.pause();
+  };
   return (
     <>
       <header className={styles["header"]}>
@@ -69,8 +82,10 @@ export const App: FunctionComponent = () => {
         </nav>
       </header>
 
-      <button type="button" className={styles["player"]}>
+      <button type="button" onClick={handleToggleAudio} className={styles["player"]}>
         <PlayerIcon />
+
+        <audio src={Audio} autoPlay></audio>
       </button>
 
       <section className={styles["main"]}>
