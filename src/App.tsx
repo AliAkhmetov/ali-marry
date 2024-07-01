@@ -1,5 +1,6 @@
 import cn from "classnames";
-import type { FunctionComponent } from "react";
+import { useTranslation } from "react-i18next";
+import { createRef, type FunctionComponent } from "react";
 import styles from "@/App.module.scss";
 import CeremonyIcon from "@/assets/icons/ceremony.svg?react";
 import CakeIcon from "@/assets/icons/cake.svg?react";
@@ -19,20 +20,29 @@ import Audio from "@/assets/audios/audio.mp3";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
+import i18n from "./i18n";
 
 export const App: FunctionComponent = () => {
+  const { t } = useTranslation();
+
+  const invitionRef = createRef<HTMLElement>();
+  const dateRef = createRef<HTMLElement>();
+  const addressRef = createRef<HTMLElement>();
+  const anketaRef = createRef<HTMLElement>();
+
   const handleToggleAudio = () => {
     const audio = document.querySelector("audio");
 
     if (!audio) return;
 
     if (audio.paused) {
-      console.log("play")
+      console.log("play");
       return audio.play();
     }
-    console.log("pause")
+    console.log("pause");
     audio.pause();
   };
+
   return (
     <>
       <header className={styles["header"]}>
@@ -40,14 +50,23 @@ export const App: FunctionComponent = () => {
           <li className={styles["header-languages__item"]}>
             <button
               type="button"
-              className={cn(styles["header-languages__button"], styles["active"])}
+              onClick={() => i18n.changeLanguage("kk")}
+              className={cn(styles["header-languages__button"], {
+                [styles["active"]]: i18n.language === "kk",
+              })}
             >
               қаз
             </button>
           </li>
 
           <li className={styles["header-languages__item"]}>
-            <button type="button" className={cn(styles["header-languages__button"])}>
+            <button
+              type="button"
+              onClick={() => i18n.changeLanguage("ru")}
+              className={cn(styles["header-languages__button"], {
+                [styles["active"]]: i18n.language === "ru",
+              })}
+            >
               рус
             </button>
           </li>
@@ -56,27 +75,43 @@ export const App: FunctionComponent = () => {
         <nav className={styles["header-nav"]}>
           <ul className={styles["header-nav__list"]}>
             <li className={styles["header-nav__item"]}>
-              <a href="#" className={styles["header-nav__link"]}>
-                Шақыру
+              <a
+                href="#"
+                onClick={() => invitionRef.current?.scrollIntoView({ behavior: "smooth" })}
+                className={styles["header-nav__link"]}
+              >
+                {t("header.nav.coming")}
               </a>
             </li>
 
             <li className={styles["header-nav__item"]}>
-              <a href="#" className={styles["header-nav__link"]}>
-                Күні
-              </a>
+              <button
+                type="button"
+                onClick={() => dateRef.current?.scrollIntoView({ behavior: "smooth" })}
+                className={styles["header-nav__link"]}
+              >
+                {t("header.nav.day")}
+              </button>
             </li>
 
             <li className={styles["header-nav__item"]}>
-              <a href="#" className={styles["header-nav__link"]}>
-                Мекенжай
-              </a>
+              <button
+                type="button"
+                onClick={() => addressRef.current?.scrollIntoView({ behavior: "smooth" })}
+                className={styles["header-nav__link"]}
+              >
+                {t("header.nav.address")}
+              </button>
             </li>
 
             <li className={styles["header-nav__item"]}>
-              <a href="#" className={styles["header-nav__link"]}>
-                Анкета
-              </a>
+              <button
+                type="button"
+                onClick={() => anketaRef.current?.scrollIntoView({ behavior: "smooth" })}
+                className={styles["header-nav__link"]}
+              >
+                {t("header.nav.form")}
+              </button>
             </li>
           </ul>
         </nav>
@@ -85,7 +120,8 @@ export const App: FunctionComponent = () => {
       <button type="button" onClick={handleToggleAudio} className={styles["player"]}>
         <PlayerIcon />
 
-        <audio src={Audio} autoPlay></audio>
+        {/* <audio src={Audio} autoPlay></audio> */}
+        <audio src={Audio}></audio>
       </button>
 
       <section className={styles["main"]}>
@@ -94,91 +130,90 @@ export const App: FunctionComponent = () => {
         </h1>
 
         <div className={styles["main__subtitle"]}>
-          <p>сенбі</p>
+          <p>{t("main.saturday")}</p>
           <span>07</span>
-          <p>қыркүйек</p>
+          <p>{t("main.september")}</p>
         </div>
       </section>
 
-      <section className={styles["about"]}>
-        <p className={styles["about__title"]}>
-          Құрметті ағайын-туыс, нағашылар, <br /> құда-жекжат, бауырлар, дос- <br />
-          жарандар, көршілер және әріптестер!
-        </p>
+      <section ref={invitionRef} id="invition" className={styles["about"]}>
+        <p
+          className={styles["about__title"]}
+          dangerouslySetInnerHTML={{ __html: t("about.title") }}
+        ></p>
 
-        <p className={styles["about__subtitle"]}>
-          Cіздерді <br />
-          <span>Мухаметали мен Аружанның</span> <br />
-          үйлену тойына арналған салтанатты ақ дастарханымыздың қадірлі қонағы болуға шақырамыз!
-        </p>
+        <p
+          className={styles["about__subtitle"]}
+          dangerouslySetInnerHTML={{ __html: t("about.subtitle") }}
+        ></p>
       </section>
 
-      <section className={styles["ceremony"]}>
+      <section ref={dateRef} id="date" className={styles["ceremony"]}>
         <div className={styles["ceremony__icon"]}>
           <CeremonyIcon />
         </div>
 
-        <h2 className={styles["ceremony__title"]}>Той салтанаты:</h2>
+        <h2 className={styles["ceremony__title"]}>{t("ceremony.title")}</h2>
         <h2 className={styles["ceremony__date"]}>07.09.24</h2>
 
         <div className={styles["ceremony-calendar"]}>
-          <h2 className={styles["ceremony-calendar__title"]}>Қыркүйек</h2>
+          <h2 className={styles["ceremony-calendar__title"]}>{t("ceremony.september")}</h2>
 
           <ul className={styles["ceremony-calendar__days"]}>
             <li className={styles["ceremony-calendar__day"]}>
-              <span>дс</span>
+              <span>{t("ceremony.weeks.1")}</span>
               <span>2</span>
             </li>
 
             <li className={styles["ceremony-calendar__day"]}>
-              <span>сс</span>
+              <span>{t("ceremony.weeks.2")}</span>
               <span>3</span>
             </li>
 
             <li className={styles["ceremony-calendar__day"]}>
-              <span>ср</span>
+              <span>{t("ceremony.weeks.3")}</span>
               <span>4</span>
             </li>
 
             <li className={styles["ceremony-calendar__day"]}>
-              <span>бс</span>
+              <span>{t("ceremony.weeks.4")}</span>
               <span>5</span>
             </li>
 
             <li className={styles["ceremony-calendar__day"]}>
-              <span>жм</span>
+              <span>{t("ceremony.weeks.5")}</span>
               <span>6</span>
             </li>
 
             <li className={cn(styles["ceremony-calendar__day"], styles["active"])}>
-              <span>сн</span>
+              <span>{t("ceremony.weeks.6")}</span>
               <span>7</span>
             </li>
 
             <li className={styles["ceremony-calendar__day"]}>
-              <span>жс</span>
+              <span>{t("ceremony.weeks.7")}</span>
               <span>8</span>
             </li>
           </ul>
         </div>
 
         <div className={styles["ceremony__time"]}>
-          <p>Басталуы:</p>
+          <p>{t("ceremony.start")}</p>
           <span>18:00</span>
         </div>
       </section>
 
-      <section className={styles["address"]}>
+      <section ref={addressRef} id="address" className={styles["address"]}>
         <div className={styles["address__icon"]}>
           <CakeIcon />
         </div>
 
-        <h2 className={styles["address__title"]}>Мекен-жайымыз:</h2>
+        <h2 className={styles["address__title"]}>{t("address.title")}</h2>
         <div className={styles["address__content"]}>
-          <p>Тараз қаласы,</p>
-          <p>Абай даңғылы, 120</p>
-          <p className={styles["colored"]}>“Сәтті”</p>
-          <p>мейрамханасы</p>
+          <p>{t("address.content.slice_1")}</p>
+          <p>{t("address.content.slice_2")}</p>
+          <p className={styles["colored"]}>{t("address.content.slice_3")}</p>
+          <p>{t("address.content.slice_4")}</p>
         </div>
 
         <div className={styles["address__map"]}>
@@ -192,40 +227,41 @@ export const App: FunctionComponent = () => {
         </div>
       </section>
 
-      <section className={styles["form"]}>
+      <section ref={anketaRef} id="anketa" className={styles["form"]}>
         <div className={styles["form__icon"]}>
           <MusicIcon />
         </div>
 
-        <h2 className={styles["form__title"]}>Тойға қатысуыңызды растауыңызды сұраймыз!</h2>
+        <h2
+          className={styles["form__title"]}
+          dangerouslySetInnerHTML={{ __html: t("form.title") }}
+        />
 
-        <p className={styles["form__subtitle"]}>
-          Аты-жөніңіз (жұбыңызбен келетін болсаңыз, есімдеріңізді бірге жазуыңызды өтінеміз)
-        </p>
+        <p className={styles["form__subtitle"]}>{t("form.subtitle")}</p>
 
         <div className={styles["form-card"]}>
           <form className={styles["form-element"]} onSubmit={(e) => e.preventDefault()}>
-            <input placeholder="Есіміңіз" className={styles["form-element__field"]} />
+            <input placeholder={t("form.placeholder")} className={styles["form-element__field"]} />
 
             <div className={styles["form-element__checkboxes"]}>
               <label htmlFor="coming">
                 <input type="checkbox" id="coming" />
-                <span>Келемін</span>
+                <span>{t("form.coming")}</span>
               </label>
 
               <label htmlFor="with-pair">
                 <input type="checkbox" id="with-pair" />
-                <span>Жұбыммен келемін</span>
+                <span>{t("form.with-pair")}</span>
               </label>
 
               <label htmlFor="no-coming">
                 <input type="checkbox" id="no-coming" />
-                <span>Өкінішке орай, қатыса алмаймын</span>
+                <span>{t("form.with-pair")}</span>
               </label>
             </div>
 
             <button type="submit" className={styles["form-element__submit"]}>
-              Жіберу
+              {t("form.submit")}
             </button>
           </form>
 
@@ -236,7 +272,7 @@ export const App: FunctionComponent = () => {
       </section>
 
       <section className={styles["gallery"]}>
-        <h2 className={styles["gallery__title"]}>Фотоальбом</h2>
+        <h2 className={styles["gallery__title"]}>{t("owners.title")}</h2>
 
         <div className={styles["gallery__icon"]}>
           <CameraIcon />
@@ -292,11 +328,9 @@ export const App: FunctionComponent = () => {
       </section>
 
       <section className={styles["owners"]}>
-        <h2 className={styles["owners__title"]}>Той иелері:</h2>
-        <h2 className={styles["owners__names"]}>Жандарбек - Қарлығаш</h2>
-        <h2 className={styles["owners__subtitle"]}>
-          Келіңіздер, тойымыздың қадірлі қонағы болыңыздар!
-        </h2>
+        <h2 className={styles["owners__title"]}>{t("owners.title")}</h2>
+        <h2 className={styles["owners__names"]}>{t("owners.names")}</h2>
+        <h2 className={styles["owners__subtitle"]}>{t("owners.subtitle")}</h2>
       </section>
     </>
   );
