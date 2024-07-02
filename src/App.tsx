@@ -1,6 +1,6 @@
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { FormEvent, createRef, type FunctionComponent } from "react";
+import { FormEvent, createRef, useState, type FunctionComponent } from "react";
 import styles from "@/App.module.scss";
 import CeremonyIcon from "@/assets/icons/ceremony.svg?react";
 import CakeIcon from "@/assets/icons/cake.svg?react";
@@ -30,25 +30,34 @@ export const App: FunctionComponent = () => {
   const dateRef = createRef<HTMLElement>();
   const addressRef = createRef<HTMLElement>();
   const anketaRef = createRef<HTMLElement>();
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+
+  const [isOpenedModal, setIsOpenedModal] = useState(false);
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-  
+
     // Используем деструктуризацию для более чистого извлечения элементов формы
-    const [nameInput, comingInput, withPairInput, noComingInput] = Array.from(event.target.elements) as HTMLInputElement[];
-  
+    const [nameInput, comingInput, withPairInput, noComingInput] = Array.from(
+      event.target.elements
+    ) as HTMLInputElement[];
+
     // Функция для определения значения приглашения
     const getInvitation = () => {
       if (comingInput.checked) return 1;
       if (withPairInput.checked) return 2;
       return 0;
     };
-  
+
     // Проверяем, что элементы формы существуют перед отправкой данных
     if (nameInput && comingInput && withPairInput && noComingInput) {
       await sendForm({ name: nameInput.value, count: getInvitation() });
+      setIsOpenedModal(true);
+
+      setTimeout(() => {
+        setIsOpenedModal(false);
+      }, 5000);
     }
   };
-  
 
   const handleToggleAudio = () => {
     const audio = document.querySelector("audio");
@@ -260,21 +269,25 @@ export const App: FunctionComponent = () => {
 
         <div className={styles["form-card"]}>
           <form className={styles["form-element"]} onSubmit={handleSubmit}>
-            <input placeholder={t("form.placeholder")} className={styles["form-element__field"]} />
+            <input
+              required
+              placeholder={t("form.placeholder")}
+              className={styles["form-element__field"]}
+            />
 
             <div className={styles["form-element__checkboxes"]}>
               <label htmlFor="coming">
-                <input type="radio" name="invition" id="coming" />
+                <input required type="radio" name="invition" id="coming" />
                 <span>{t("form.coming")}</span>
               </label>
 
               <label htmlFor="with-pair">
-                <input type="radio" name="invition" id="with-pair" />
+                <input required type="radio" name="invition" id="with-pair" />
                 <span>{t("form.with-pair")}</span>
               </label>
 
               <label htmlFor="no-coming">
-                <input type="radio" name="invition" id="no-coming" />
+                <input required type="radio" name="invition" id="no-coming" />
                 <span>{t("form.no-coming")}</span>
               </label>
             </div>
@@ -289,6 +302,25 @@ export const App: FunctionComponent = () => {
           </div>
         </div>
       </section>
+
+      {isOpenedModal && (
+        <div className={styles["success-modal"]}>
+          <div className={styles["success-modal__icon"]}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+          </div>
+
+          <div className={styles["success-modal__title"]}>{t("modal.success.title")}</div>
+        </div>
+      )}
 
       <section className={styles["gallery"]}>
         <h2 className={styles["gallery__title"]}>{t("gallery.title")}</h2>
