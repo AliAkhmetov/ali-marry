@@ -1,6 +1,6 @@
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { createRef, type FunctionComponent } from "react";
+import { FormEvent, createRef, type FunctionComponent } from "react";
 import styles from "@/App.module.scss";
 import CeremonyIcon from "@/assets/icons/ceremony.svg?react";
 import CakeIcon from "@/assets/icons/cake.svg?react";
@@ -21,6 +21,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import i18n from "./i18n";
+import { sendForm } from "./api/form";
 
 export const App: FunctionComponent = () => {
   const { t } = useTranslation();
@@ -29,6 +30,25 @@ export const App: FunctionComponent = () => {
   const dateRef = createRef<HTMLElement>();
   const addressRef = createRef<HTMLElement>();
   const anketaRef = createRef<HTMLElement>();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  
+    // Используем деструктуризацию для более чистого извлечения элементов формы
+    const [nameInput, comingInput, withPairInput, noComingInput] = Array.from(event.target.elements) as HTMLInputElement[];
+  
+    // Функция для определения значения приглашения
+    const getInvitation = () => {
+      if (comingInput.checked) return 1;
+      if (withPairInput.checked) return 2;
+      return 0;
+    };
+  
+    // Проверяем, что элементы формы существуют перед отправкой данных
+    if (nameInput && comingInput && withPairInput && noComingInput) {
+      await sendForm({ name: nameInput.value, count: getInvitation() });
+    }
+  };
+  
 
   const handleToggleAudio = () => {
     const audio = document.querySelector("audio");
@@ -120,8 +140,7 @@ export const App: FunctionComponent = () => {
       <button type="button" onClick={handleToggleAudio} className={styles["player"]}>
         <PlayerIcon />
 
-        {/* <audio src={Audio} autoPlay></audio> */}
-        <audio src={Audio}></audio>
+        <audio src={Audio} autoPlay></audio>
       </button>
 
       <section className={styles["main"]}>
@@ -240,23 +259,23 @@ export const App: FunctionComponent = () => {
         <p className={styles["form__subtitle"]}>{t("form.subtitle")}</p>
 
         <div className={styles["form-card"]}>
-          <form className={styles["form-element"]} onSubmit={(e) => e.preventDefault()}>
+          <form className={styles["form-element"]} onSubmit={handleSubmit}>
             <input placeholder={t("form.placeholder")} className={styles["form-element__field"]} />
 
             <div className={styles["form-element__checkboxes"]}>
               <label htmlFor="coming">
-                <input type="checkbox" id="coming" />
+                <input type="radio" name="invition" id="coming" />
                 <span>{t("form.coming")}</span>
               </label>
 
               <label htmlFor="with-pair">
-                <input type="checkbox" id="with-pair" />
+                <input type="radio" name="invition" id="with-pair" />
                 <span>{t("form.with-pair")}</span>
               </label>
 
               <label htmlFor="no-coming">
-                <input type="checkbox" id="no-coming" />
-                <span>{t("form.with-pair")}</span>
+                <input type="radio" name="invition" id="no-coming" />
+                <span>{t("form.no-coming")}</span>
               </label>
             </div>
 

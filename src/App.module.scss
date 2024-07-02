@@ -614,9 +614,15 @@
     line-height: 42.72px;
     text-align: center;
 
+    transition: .1s ease;
+
     @media (max-width: 768px) {
       font-size: 14px;
       line-height: 14px;
+    }
+
+    &:active {
+      scale: .9;
     }
   }
 }
