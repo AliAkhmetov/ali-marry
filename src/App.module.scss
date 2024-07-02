@@ -409,14 +409,15 @@
     row-gap: 8px;
 
     p {
-      font-family: "Playfair Display", sans-serif;
+      font-family: "Atyp Display", sans-serif;
       font-size: clamp(1.5rem, 4.75vw + 0.55rem, 6.25rem);
-      font-style: italic;
-      font-weight: 400;
+      font-weight: 300;
       line-height: clamp(1.875rem, 6.375vw + 0.6rem, 8.25rem);
       text-align: center;
-
+      
       &.colored {
+        margin-top: 24px;
+        font-family: "Miama Nueva", sans-serif;
         color: #ad8955;
         font-size: clamp(2rem, 6vw + 0.8rem, 8rem);
       }
